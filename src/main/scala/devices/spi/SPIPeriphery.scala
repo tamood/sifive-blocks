@@ -26,8 +26,11 @@ trait HasPeripherySPIModuleImp extends LazyModuleImp with HasPeripherySPIBundle 
 case object PeripherySPIFlashKey extends Field[Seq[SPIFlashParams]](Nil)
 
 trait HasPeripherySPIFlash { this: BaseSubsystem =>
-  val qspiNodes = p(PeripherySPIFlashKey).map { ps =>
-    SPIFlashAttachParams(ps, fBufferDepth = 8).attachTo(this).ioNode.makeSink()
+  val tlqspi = p(PeripherySPIFlashKey).map { ps =>
+    SPIFlashAttachParams(ps, fBufferDepth = 8).attachTo(this)
+  }
+  val qspiNodes = tlqspi.map { node =>
+    node.ioNode.makeSink() 
   }
 }
 
