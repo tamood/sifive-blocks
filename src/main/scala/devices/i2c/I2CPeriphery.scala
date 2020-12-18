@@ -10,8 +10,11 @@ import freechips.rocketchip.subsystem.{BaseSubsystem}
 case object PeripheryI2CKey extends Field[Seq[I2CParams]](Nil)
 
 trait HasPeripheryI2C { this: BaseSubsystem =>
-  val i2cNodes =  p(PeripheryI2CKey).map { ps =>
-    I2CAttachParams(ps).attachTo(this).ioNode.makeSink()
+  val i2cs = p(PeripheryI2CKey).map { ps =>
+    I2CAttachParams(ps).attachTo(this)
+  }
+  val i2cNodes =  i2cs.map {
+    _.ioNode.makeSink()
   }
 }
 
